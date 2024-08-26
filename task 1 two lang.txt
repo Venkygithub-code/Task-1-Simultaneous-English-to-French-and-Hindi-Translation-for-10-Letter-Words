@@ -1,0 +1,69 @@
+from tkinter import *
+from tkinter import ttk
+from googletrans import Translator, LANGUAGES
+
+# Initialize the main window
+root = Tk()
+root.geometry("1100x320")
+root.resizable(0, 0)
+root['bg'] = 'skyblue'
+root.title('Simultaneous Language Translator by Venkatesh Gudikoti')
+
+# Title Label
+Label(root, text="Simultaneous Language Translator", font="Arial 20 bold").pack()
+
+# Input Label and Entry
+Label(root, text="Enter 10-letter Word", font="Arial 13 bold", bg="white smoke").place(x=165, y=90)
+Input_text = Entry(root, width=60)
+Input_text.place(x=30, y=130)
+
+# Output Labels and Text Widgets for Two Languages
+Label(root, text="Output (Language 1)", font='Arial 13 bold', bg='white smoke').place(x=780, y=90)
+Output_text1 = Text(root, font='Arial 10', height=5, wrap=WORD, padx=5, pady=5, width=25)
+Output_text1.place(x=600, y=138)
+
+Label(root, text="Output (Language 2)", font='Arial 13 bold', bg='white smoke').place(x=780, y=200)
+Output_text2 = Text(root, font='Arial 10', height=5, wrap=WORD, padx=5, pady=5, width=25)
+Output_text2.place(x=600, y=248)
+
+# Language List and Dropdowns for Two Languages
+language = list(LANGUAGES.values())
+dest_lang1 = ttk.Combobox(root, values=language, width=22)
+dest_lang1.place(x=130, y=180)
+dest_lang1.set('choose language 1')
+
+dest_lang2 = ttk.Combobox(root, values=language, width=22)
+dest_lang2.place(x=130, y=230)
+dest_lang2.set('choose language 2')
+
+
+# Translation Function
+def Translate():
+    text = Input_text.get()
+
+    # Check if the word is exactly 10 letters
+    if len(text) == 10:
+        translator = Translator()
+        translated1 = translator.translate(text=text, dest=dest_lang1.get())
+        translated2 = translator.translate(text=text, dest=dest_lang2.get())
+
+        Output_text1.delete(1.0, END)
+        Output_text1.insert(END, translated1.text)
+
+        Output_text2.delete(1.0, END)
+        Output_text2.insert(END, translated2.text)
+    else:
+        Output_text1.delete(1.0, END)
+        Output_text1.insert(END, "Please enter a 10-letter word.")
+
+        Output_text2.delete(1.0, END)
+        Output_text2.insert(END, "Please enter a 10-letter word.")
+
+
+# Translate Button
+trans_btn = Button(root, text='Translate', font='Arial 12 bold', pady=5, command=Translate, bg='orange',
+                   activebackground="green")
+trans_btn.place(x=445, y=180)
+
+# Main loop
+root.mainloop()
